@@ -20,6 +20,7 @@
     "noImplicitThis": false,
     "noImplicitAny": false
   },
+  "files": ["src/types/globals.d.ts"],
   "include": ["src/lib/*"],
   "exclude": ["tests"]
 }

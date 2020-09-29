@@ -1,18 +1,20 @@
 import React from 'react';
-import Gallery from '../../../lib/react-alice-carousel';
+
+import markdown from './code.md';
+import TheCode from '../../the-code';
+import AliceCarousel from '../../../lib/react-alice-carousel';
 import '../../../lib/scss/alice-carousel.scss';
 
 const BasicPage = () => {
 	return (
 		<section className="p-basic">
-			<Gallery
+			<AliceCarousel
 				mouseTracking
 				responsive={{
 					0: { items: 1 },
 					568: { items: 2 },
 					1024: { items: 3 },
 				}}
-				animationDuration={1000}
 			>
 				<div className="item">
 					<h1 className="__mod">1</h1>
@@ -29,7 +31,8 @@ const BasicPage = () => {
 				<div className="item">
 					<h1>5</h1>
 				</div>
-			</Gallery>
+			</AliceCarousel>
+			<TheCode html={markdown} />
 		</section>
 	);
 };

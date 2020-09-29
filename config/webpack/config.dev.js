@@ -1,8 +1,9 @@
+const { merge } = require('webpack-merge');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const configBase = require('./config.base');
 
-module.exports = {
-	entry: ['./src/index.tsx'],
+const configDev = {
 	mode: 'development',
 	devtool: 'source-map',
 	devServer: {
@@ -21,34 +22,7 @@ module.exports = {
 				exclude: /node_modules/,
 				use: ['babel-loader', 'ts-loader'],
 			},
-			{
-				test: /\.(sa|sc|c)ss$/,
-				exclude: /node_modules/,
-				use: [
-					{
-						loader: MiniCssExtractPlugin.loader,
-						options: {
-							hmr: true,
-							reloadAll: true,
-						},
-					},
-					'css-loader',
-					'sass-loader',
-				],
-			},
-			{
-				test: /\.html$/,
-				use: [
-					{
-						loader: 'html-loader',
-						options: { minimize: false },
-					},
-				],
-			},
 		],
-	},
-	resolve: {
-		extensions: ['.ts', '.tsx', '.js', '.jsx'],
 	},
 	plugins: [
 		new HtmlWebPackPlugin({
@@ -58,3 +32,5 @@ module.exports = {
 		new MiniCssExtractPlugin({ filename: 'style.css' }),
 	],
 };
+
+module.exports = merge(configBase, configDev);

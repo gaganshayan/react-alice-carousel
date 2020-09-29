@@ -1,3 +1,4 @@
+@import '~highlight.js/styles/github.css';
 @import '../../common';
 
 .alice-carousel__wrapper {
@@ -18,7 +19,7 @@
 		text-align: center;
 		user-select: none;
 		color: $color-light;
-		background-color: rgba($color-dark, 0.3);
+		background-color: $color-bg;
 		&:before {
 			content: '';
 			height: 100%;
