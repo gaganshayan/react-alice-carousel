@@ -11,16 +11,16 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 	private isAnimationDisabled: boolean;
 	private isHovered: boolean;
 	private isTouchMoveProcessStarted: boolean;
+	private cancelTouchAnimations: boolean;
 	private hasUserAction: boolean;
-	private lastSwipePosition: undefined | number;
 	private RootElement: null | undefined;
 	private rootComponentDimensions: RootElement;
-	private stageComponent: null | undefined;
 	private slideEndTimeoutId: number | undefined;
+	private stageComponent: null | undefined;
+	private startTouchmovePosition: undefined | number;
 	private swipeListener: VS | null = null;
 	private touchEndTimeoutId: number | undefined;
 	private _handleResizeDebounced: () => void | undefined;
-	private _handleTouchmoveThrottled: () => void | undefined;
 
 	constructor(props) {
 		super(props);
@@ -58,11 +58,12 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 		this.isHovered = false;
 		this.isAnimationDisabled = false;
 		this.isTouchMoveProcessStarted = false;
+		this.cancelTouchAnimations = false;
 		this.hasUserAction = false;
-		this.lastSwipePosition = undefined;
 		this.RootElement = undefined;
 		this.rootComponentDimensions = {};
 		this.stageComponent = undefined;
+		this.startTouchmovePosition = undefined;
 		this.slideTo = this.slideTo.bind(this);
 		this.slidePrev = this.slidePrev.bind(this);
 		this.slideNext = this.slideNext.bind(this);
@@ -71,7 +72,6 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 		this._handleDotClick = this._handleDotClick.bind(this);
 		this._handleResize = this._handleResize.bind(this);
 		this._handleResizeDebounced = Utils.debounce(this._handleResize, 100);
-		this._handleTouchmoveThrottled = Utils.throttle(this._handleTouchmove, 16);
 	}
 
 	async componentDidMount() {
@@ -159,6 +159,13 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 		);
 	}
 
+	get touchmovePosition() {
+		if (this.startTouchmovePosition !== undefined) {
+			return this.startTouchmovePosition;
+		}
+		return this.state.translate3d;
+	}
+
 	slideTo(activeIndex = 0) {
 		this._handlePause();
 
@@ -232,32 +239,34 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 	}
 
 	_handleTouchmove(e, eventData: EventData) {
-		const { absX, deltaX } = eventData;
+		const { absY, absX, deltaX } = eventData;
 		const { swipeDelta } = this.props;
-		const { swipeShiftValue, infinite, translate3d } = this.state;
+		const { swipeShiftValue, swipeLimitMin, swipeLimitMax, infinite, fadeoutAnimationProcessing } = this.state;
 
 		this.hasUserAction = true;
 
-		if (this.isAnimationDisabled || (!this.isTouchMoveProcessStarted && absX < Number(swipeDelta))) {
+		if (
+			fadeoutAnimationProcessing ||
+			(!this.isTouchMoveProcessStarted && Utils.isVerticalTouchmoveDetected(absX, absY, swipeDelta))
+		) {
 			return;
 		}
 
 		if (!this.isTouchMoveProcessStarted) {
 			this._cancelTimeoutAnimations();
+			this._setTouchmovePosition();
+			this.isAnimationDisabled = true;
 			this.isTouchMoveProcessStarted = true;
 		}
 
-		let position = Utils.getTouchmoveTranslatePosition(deltaX, translate3d);
-		const { swipeLimitMin, swipeLimitMax } = this.state;
+		let position = Utils.getTouchmoveTranslatePosition(deltaX, this.touchmovePosition);
 
 		if (infinite === false) {
 			if (position > swipeLimitMin || -swipeLimitMax > position) {
-				this.lastSwipePosition = position > 0 ? swipeLimitMin : swipeLimitMax;
 				return;
 			}
 
 			Utils.animate(this.stageComponent, { position });
-			this.lastSwipePosition = position;
 			return;
 		}
 
@@ -270,7 +279,6 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 		}
 
 		Utils.animate(this.stageComponent, { position });
-		this.lastSwipePosition = position;
 
 		function recalculatePosition() {
 			if (Utils.getIsLeftDirection(deltaX)) {
@@ -286,13 +294,15 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 	}
 
 	_handleTouchend(e, { deltaX }: EventData) {
+		this._clearTouchmovePosition();
+
 		if (this.isTouchMoveProcessStarted) {
-			this.isAnimationDisabled = true;
 			this.isTouchMoveProcessStarted = false;
 
 			const { animationDuration } = this.state;
 			const { animationEasingFunction } = this.props;
-			const position = Utils.getSwipeTouchendPosition(this.state, deltaX, this.lastSwipePosition);
+			const touchendPosition = Utils.getTranslateXProperty(this.stageComponent);
+			const position = Utils.getSwipeTouchendPosition(this.state, deltaX, touchendPosition);
 
 			this._handleSlideChange();
 			Utils.animate(this.stageComponent, { position, animationDuration, animationEasingFunction });
@@ -302,7 +312,6 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 	}
 
 	_handleBeforeTouchEnd(position: number) {
-		this.lastSwipePosition = undefined;
 		const { animationDuration } = this.state;
 
 		this.touchEndTimeoutId = setTimeout(async () => {
@@ -454,6 +463,12 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 		isAutoPlaying ? this._handlePause() : this._handlePlay();
 	};
 
+	_cancelTimeoutAnimations() {
+		this._clearAutoPlayTimeout();
+		this._clearSlideEndTimeout();
+		this.clearTouchendTimeout();
+	}
+
 	_clearAutoPlayTimeout() {
 		clearTimeout(this.autoPlayTimeoutId);
 		this.autoPlayTimeoutId = undefined;
@@ -464,15 +479,18 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 		this.slideEndTimeoutId = undefined;
 	}
 
-	_clearTouchEndTimeout() {
+	clearTouchendTimeout() {
 		clearTimeout(this.touchEndTimeoutId);
 		this.touchEndTimeoutId = undefined;
 	}
 
-	_cancelTimeoutAnimations() {
-		this._clearAutoPlayTimeout();
-		this._clearSlideEndTimeout();
-		this._clearTouchEndTimeout();
+	_clearTouchmovePosition() {
+		this.startTouchmovePosition = undefined;
+	}
+
+	_setTouchmovePosition() {
+		const position = Utils.getTranslateXProperty(this.stageComponent);
+		this.startTouchmovePosition = -position;
 	}
 
 	_setRootComponentRef = (node) => {
@@ -508,7 +526,7 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 		this.swipeListener = new VS({
 			element: this.RootElement,
 			delta: this.props.swipeDelta,
-			onSwiping: this._handleTouchmoveThrottled,
+			onSwiping: this._handleTouchmove,
 			onSwiped: this._handleTouchend,
 			rotationAngle: 5,
 			mouseTrackingEnabled: this.props.mouseTracking,

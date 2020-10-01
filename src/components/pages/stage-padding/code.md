@@ -21,6 +21,8 @@ const Carousel = () => (
     <AliceCarousel
         mouseTracking
         items={items}
+        paddingLeft={50}
+        paddingRight={50}
         responsive={responsive}
     />
 );

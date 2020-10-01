@@ -1,34 +1,30 @@
 export default [
 	{
 		id: 'basic',
-		name: 'basic',
+		title: 'basic',
+	},
+	{
+		id: 'stage-padding',
+		title: 'stage padding',
+	},
+	{
+		id: 'fadeout',
+		title: 'fadeout animation',
 	},
 	// {
-	// 	id: 'infinite',
-	// 	name: 'infinite',
-	// },
-	// {
-	// 	id: 'fadeout',
-	// 	name: 'fadeout',
-	// },
-	// {
-	// 	id: 'stage-padding',
-	// 	name: 'stage padding',
-	// },
-	// {
 	// 	id: 'auto-height',
-	// 	name: 'auto height',
+	// 	title: 'auto height',
 	// },
 	// {
 	// 	id: 'auto-width',
-	// 	name: 'auto width',
+	// 	title: 'auto width',
 	// },
 	// {
 	// 	id: 'auto-play',
-	// 	name: 'auto play',
+	// 	title: 'auto play',
 	// },
 	// {
 	// 	id: 'sandbox',
-	// 	name: 'sandbox',
+	// 	title: 'sandbox',
 	// },
 ];

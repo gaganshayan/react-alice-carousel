@@ -129,3 +129,7 @@ export const getFadeoutAnimationPosition = (nextIndex, state: State) => {
 		return (nextIndex - activeIndex) * stageWidth || 0;
 	}
 };
+
+export const isVerticalTouchmoveDetected = (absX: number, absY: number, swipeDelta = 0) => {
+	return absX < swipeDelta || absY * 0.1 > absX;
+};

@@ -213,3 +213,19 @@ export const getTranslate3dProperty = (nextIndex, state: Partial<State>) => {
 export const getTouchmoveTranslatePosition = (deltaX: number, translate3d: number) => {
 	return -(translate3d - Math.floor(deltaX));
 };
+
+export function getTranslateXProperty(element) {
+	const matrix = getTransformMatrix(element);
+	const tx = (matrix && matrix[4]) || '';
+	return Number(tx);
+}
+
+export function getTransformMatrix(element) {
+	if (Utils.isElement(element)) {
+		const { transform } = getComputedStyle(element);
+		const matched = transform.match(/(-?[0-9.]+)/g);
+
+		return matched || [];
+	}
+	return [];
+}
