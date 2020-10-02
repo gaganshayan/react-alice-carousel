@@ -4,6 +4,18 @@ export default [
 		title: 'basic',
 	},
 	{
+		id: 'auto-height',
+		title: 'autoheight',
+	},
+	{
+		id: 'auto-width',
+		title: 'autowidth',
+	},
+	{
+		id: 'auto-play',
+		title: 'autoplay',
+	},
+	{
 		id: 'stage-padding',
 		title: 'stage padding',
 	},
@@ -11,18 +23,6 @@ export default [
 		id: 'fadeout',
 		title: 'fadeout animation',
 	},
-	// {
-	// 	id: 'auto-height',
-	// 	title: 'auto height',
-	// },
-	// {
-	// 	id: 'auto-width',
-	// 	title: 'auto width',
-	// },
-	// {
-	// 	id: 'auto-play',
-	// 	title: 'auto play',
-	// },
 	// {
 	// 	id: 'sandbox',
 	// 	title: 'sandbox',

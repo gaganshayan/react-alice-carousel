@@ -5,10 +5,14 @@ import TheCode from '../../the-code';
 import AliceCarousel from '../../../lib/react-alice-carousel';
 import '../../../lib/scss/alice-carousel.scss';
 
-const BasicPage = () => {
+const AutoplayPage = () => {
 	return (
 		<section className="p-basic">
 			<AliceCarousel
+				autoPlayInterval={1000}
+				cancelAutoPlayOnHover
+				disablePlayButtonControls={false}
+				infinite
 				mouseTracking
 				responsive={{
 					0: { items: 1 },
@@ -37,4 +41,4 @@ const BasicPage = () => {
 	);
 };
 
-export default BasicPage;
+export default AutoplayPage;
