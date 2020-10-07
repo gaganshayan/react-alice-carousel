@@ -3,22 +3,23 @@ import React from 'react';
 import markdown from './code.md';
 import TheCode from '../../the-code';
 import AliceCarousel from '../../../lib/react-alice-carousel';
+import { AutoPlayStrategy, AnimationType } from '../../../lib/types';
 import '../../../lib/scss/alice-carousel.scss';
 
 const AutoplayPage = () => {
 	return (
 		<section className="p-basic">
 			<AliceCarousel
+				autoPlay
+				autoPlayControls
+				autoPlayStrategy={AutoPlayStrategy.NONE}
 				autoPlayInterval={1000}
-				cancelAutoPlayOnHover
-				disablePlayButtonControls={false}
+				animationDuration={1000}
+				animationType={AnimationType.FADEOUT}
 				infinite
-				mouseTracking
-				responsive={{
-					0: { items: 1 },
-					568: { items: 2 },
-					1024: { items: 3 },
-				}}
+				touchTracking={false}
+				disableDotsControls
+				disableButtonsControls
 			>
 				<div className="item">
 					<h1>1</h1>
@@ -36,6 +37,8 @@ const AutoplayPage = () => {
 					<h1>5</h1>
 				</div>
 			</AliceCarousel>
+			<br />
+			<br />
 			<TheCode html={markdown} />
 		</section>
 	);

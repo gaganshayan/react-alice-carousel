@@ -8,14 +8,17 @@
 - `autoHeight`: Boolean, default `false` - Set auto height mode.
 - `autoWidth`: Boolean, default `false` - Set auto width mode.
 - `autoPlay`: Boolean, default `false` - Set autoplay mode.
+- `autoPlayControls`: Boolean, default `false` - Show/hide `play/pause` buttons.
+- `autoPlayStrategy`: String(`default`, `action`, `all`, `none`):
+    * `default` - pause automatic playback on the hover
+    * `action` - stop automatic playback if user action was detected
+    * `all` - merge `default` && `action` strategies
+    * `none` - ignore user actions
 - `autoPlayDirection`: String(`ltr`, `rtl`), default `ltr` - Set autoplay direction value.
 - `autoPlayInterval`: Number, default `400` - Set autoplay interval value.
-- `cancelAutoPlayOnAction`: Boolean, default `false` - Cancel autoplay mode if a user action was detected.
-- `cancelAutoPlayOnHover`: Boolean, default `false` - Cancel autoplay mode if hover action was detected.
-- `controlsStrategy`: String (`default`, `responsive`), default `default` - Set a strategy for gallery controls. Dots navigation will be hidden if _responsive_ property is set and the number of gallery elements is equal to the number of items in the slide.
+- `controlsStrategy`: String (`default`, `responsive`) - Set a strategy for gallery controls. Dots navigation will be hidden if _responsive_ property is set and the number of gallery elements is equal to the number of items in the slide.
 - `disableButtonsControls`: Boolean, default `false` - Disable buttons controls.
 - `disableDotsControls`: Boolean, default `false` - Disable dots controls.
-- `disablePlayButtonControls`: Boolean, default `true` - Disable `play/pause` button.
 - `disableSlideInfo`: Boolean, default `true` - Disable information about current slide.
 - `infinite`: Boolean, default `false` - Set infinite mode.
 - `items`: Array, default `undefined`  - Set gallery items, preferable to use this property instead of children.

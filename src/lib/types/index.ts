@@ -1,65 +1,64 @@
-export type Props = {
+export interface Props {
 	activeIndex?: number;
-	animationType?: 'slide' | 'fadeout' | string;
 	animationDuration?: number;
 	animationEasingFunction?: string;
-	items?: any[];
-	children?: any;
-	infinite?: boolean;
-	disableSlideInfo?: boolean;
-	disableDotsControls?: boolean;
-	disableButtonsControls?: boolean;
-	disablePlayButtonControls?: boolean;
-	autoPlayInterval?: number;
-	autoPlayDirection?: string | Direction;
-	controlsStrategy?: string | ControlsStrategy;
-	paddingLeft?: number;
-	paddingRight?: number;
-	autoWidth?: boolean;
+	animationType?: 'slide' | 'fadeout' | AnimationType;
 	autoHeight?: boolean;
 	autoPlay?: boolean;
-	cancelAutoPlayOnHover?: boolean;
+	autoPlayControls?: boolean;
+	autoPlayDirection?: 'rtl' | 'ltr' | AutoplayDirection;
+	autoPlayInterval?: number;
+	autoPlayStrategy?: 'default' | 'all' | 'action' | 'none' | AutoPlayStrategy;
+	autoWidth?: boolean;
+	children?: any;
+	controlsStrategy?: 'default' | 'responsive' | ControlsStrategy;
+	disableButtonsControls?: boolean;
+	disableDotsControls?: boolean;
+	disableSlideInfo?: boolean;
+	infinite?: boolean;
+	items?: any[];
+	mouseTracking?: boolean;
+	paddingLeft?: number;
+	paddingRight?: number;
 	preservePosition?: boolean;
 	responsive?: Responsive;
+	swipeDelta?: number;
+	swipeExtraPadding?: number;
+	touchMoveDefaultEvents?: boolean;
+	touchTracking?: boolean;
 	onInitialized?: (e: EventObject) => void;
 	onResizeEvent?: (e: Event, prevProps: RootElement, nextProps: RootElement) => boolean;
 	onResized?: (e: EventObject) => void;
 	onSlideChange?: (e: EventObject) => void;
 	onSlideChanged?: (e: EventObject) => void;
-	swipeDelta?: number;
-	swipeExtraPadding?: number;
-	mouseTracking?: boolean;
-	touchTracking?: boolean;
-	cancelAutoPlayOnAction?: boolean;
-	touchMoveDefaultEvents?: boolean;
-};
+}
 
-export type State = {
-	clones: any[];
-	autoWidth: boolean;
-	itemsCount: number;
-	itemsInSlide: number;
+export interface State {
 	activeIndex: number;
-	infinite?: boolean;
-	isAutoPlaying: boolean;
-	translate3d: number;
-	itemsOffset: number;
-	stageWidth: number;
-	stageContentWidth: number;
-	initialStageHeight: number;
 	animationDuration?: number;
-	transition: string;
+	autoWidth: boolean;
+	clones: any[];
+	infinite?: boolean;
+	initialStageHeight: number;
+	isAutoPlaying: boolean;
 	isAutoPlayCanceledOnAction: boolean;
 	isStageContentPartial: boolean;
+	itemsCount: number;
+	itemsInSlide: number;
+	itemsOffset: number;
 	fadeoutAnimationIndex: number | null;
 	fadeoutAnimationPosition: number | null;
 	fadeoutAnimationProcessing: boolean;
-	transformationSet: TransformationSetItem[];
+	stageContentWidth: number;
+	stageWidth: number;
 	swipeLimitMin: number;
 	swipeLimitMax: number;
 	swipeAllowedPositionMax: number;
 	swipeShiftValue: number;
-};
+	transition: string;
+	transformationSet: TransformationSetItem[];
+	translate3d: number;
+}
 
 export type Style = {
 	transition: string;
@@ -101,12 +100,24 @@ export type SlideTo = {
 	fadeoutAnimationPosition?: number | null;
 };
 
+export enum AnimationType {
+	FADEOUT = 'fadeout',
+	SLIDE = 'slide',
+}
+
+export enum AutoPlayStrategy {
+	DEFAULT = 'default',
+	ALL = 'all',
+	ACTION = 'action',
+	NONE = 'none',
+}
+
 export enum ControlsStrategy {
 	DEFAULT = 'default',
 	RESPONSIVE = 'responsive',
 }
 
-export enum Direction {
+export enum AutoplayDirection {
 	RTL = 'rtl',
 	LTR = 'ltr',
 }

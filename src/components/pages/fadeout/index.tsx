@@ -3,12 +3,13 @@ import React from 'react';
 import markdown from './code.md';
 import TheCode from '../../the-code';
 import AliceCarousel from '../../../lib/react-alice-carousel';
+import { AnimationType } from '../../../lib/types';
 import '../../../lib/scss/alice-carousel.scss';
 
 const FadeoutPage = () => {
 	return (
 		<section className="p-basic">
-			<AliceCarousel infinite mouseTracking animationType="fadeout" animationDuration={800}>
+			<AliceCarousel infinite mouseTracking animationType={AnimationType.FADEOUT} animationDuration={800}>
 				<div className="item">
 					<h1 className="__mod">1</h1>
 				</div>

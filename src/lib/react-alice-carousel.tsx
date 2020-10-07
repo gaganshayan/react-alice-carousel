@@ -1,12 +1,12 @@
 import React from 'react';
 import VS, { EventData } from 'vanilla-swipe';
 import { defaultProps } from './defaultProps';
-import { Direction, Props, RootElement, SlideTo, State } from './types';
+import { AutoplayDirection, AnimationType, Props, RootElement, SlideTo, State } from './types';
 import * as Views from './views';
 import * as Utils from './utils';
 
 class AliceCarousel extends React.PureComponent<Props, State> {
-	static defaultProps: Props = defaultProps;
+	static defaultProps = defaultProps;
 	private autoPlayTimeoutId: undefined | number;
 	private isAnimationDisabled: boolean;
 	private isHovered: boolean;
@@ -155,7 +155,9 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 		const { animationType, paddingLeft, paddingRight, autoWidth, autoHeight } = this.props;
 
 		return (
-			animationType === 'fadeout' && itemsInSlide === 1 && !(paddingLeft || paddingRight || autoWidth || autoHeight)
+			itemsInSlide === 1 &&
+			animationType === AnimationType.FADEOUT &&
+			!(paddingLeft || paddingRight || autoWidth || autoHeight)
 		);
 	}
 
@@ -415,14 +417,13 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 
 	async _handleSlideChanged() {
 		const { isAutoPlaying, isAutoPlayCanceledOnAction } = this.state;
-		const { cancelAutoPlayOnAction, onSlideChanged } = this.props;
-
-		if (cancelAutoPlayOnAction && this.hasUserAction && !isAutoPlayCanceledOnAction) {
+		const { autoPlayStrategy, onSlideChanged } = this.props;
+		// debugger;
+		if (Utils.shouldCancelAutoPlayOnAction(autoPlayStrategy) && this.hasUserAction && !isAutoPlayCanceledOnAction) {
 			await this.setState({ isAutoPlayCanceledOnAction: true, isAutoPlaying: false });
 		} else {
 			isAutoPlaying && this._handlePlay();
 		}
-
 		this.isAnimationDisabled = false;
 		onSlideChanged && onSlideChanged(this.eventObject);
 	}
@@ -433,7 +434,9 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 	}
 
 	_handleMouseEnter = () => {
-		if (this.props.cancelAutoPlayOnHover && this.state.isAutoPlaying) {
+		const { autoPlayStrategy } = this.props;
+
+		if (Utils.shouldCancelAutoPlayOnHover(autoPlayStrategy) && this.state.isAutoPlaying) {
 			this.isHovered = true;
 			this._handlePause();
 		}
@@ -517,7 +520,7 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 
 		this.autoPlayTimeoutId = setTimeout(() => {
 			if (!this.isHovered) {
-				autoPlayDirection === Direction.RTL ? this.slidePrev({}) : this.slideNext({});
+				autoPlayDirection === AutoplayDirection.RTL ? this.slidePrev({}) : this.slideNext({});
 			}
 		}, autoPlayInterval);
 	}
@@ -615,7 +618,7 @@ class AliceCarousel extends React.PureComponent<Props, State> {
 				{this.props.disableSlideInfo ? null : this._renderSlideInfo()}
 				{this.props.disableButtonsControls ? null : this._renderPrevButton()}
 				{this.props.disableButtonsControls ? null : this._renderNextButton()}
-				{this.props.disablePlayButtonControls ? null : this._renderPlayPauseButton()}
+				{this.props.autoPlayControls ? this._renderPlayPauseButton() : null}
 			</div>
 		);
 	}

@@ -21,6 +21,7 @@ $play-btn-size: 32px !default;
 .alice-carousel__wrapper {
   position: relative;
   overflow-x: hidden;
+  overflow-y: hidden;
   box-sizing: border-box;
   width: 100%;
   height: auto;

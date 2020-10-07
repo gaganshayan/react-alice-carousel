@@ -1,4 +1,4 @@
-import { Props, State, ControlsStrategy } from '../types';
+import { Props, State, ControlsStrategy, AutoPlayStrategy } from '../types';
 
 export function shouldDisableDots(props: Props, state: State) {
 	const { disableDotsControls, controlsStrategy } = props || {};
@@ -37,4 +37,12 @@ export const getItemIndexForDotNavigation = (
 ) => {
 	const result = isTheLastIndex ? slidesLength - itemsInSlide : index * itemsInSlide;
 	return result || 0;
+};
+
+export const shouldCancelAutoPlayOnAction = (strategy = '') => {
+	return strategy === AutoPlayStrategy.ACTION || strategy === AutoPlayStrategy.ALL;
+};
+
+export const shouldCancelAutoPlayOnHover = (strategy = '') => {
+	return strategy === AutoPlayStrategy.DEFAULT || strategy === AutoPlayStrategy.ALL;
 };
