@@ -9,18 +9,24 @@ import '../../../lib/scss/alice-carousel.scss';
 const FadeoutPage = () => {
 	return (
 		<section className="p-basic">
-			<AliceCarousel infinite mouseTracking animationType={AnimationType.FADEOUT} animationDuration={800}>
+			<AliceCarousel
+				infinite
+				mouseTracking
+				disableButtonsControls
+				animationType={AnimationType.FADEOUT}
+				animationDuration={800}
+			>
 				<div className="item">
-					<h1 className="__mod">1</h1>
+					<h1>1</h1>
 				</div>
 				<div className="item">
-					<h1 className="__mod-2">2</h1>
+					<h1 className="__mod">2</h1>
 				</div>
 				<div className="item">
 					<h1>3</h1>
 				</div>
 				<div className="item">
-					<h1>4</h1>
+					<h1 className="__mod">4</h1>
 				</div>
 				<div className="item">
 					<h1>5</h1>

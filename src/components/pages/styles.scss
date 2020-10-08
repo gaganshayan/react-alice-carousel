@@ -26,5 +26,8 @@
 			display: inline-block;
 			vertical-align: middle;
 		}
+		&.__mod {
+			background-color: $color-dark;
+		}
 	}
 }

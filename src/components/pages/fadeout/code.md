@@ -13,11 +13,12 @@ const items = [
 
 const Carousel = () => (
     <AliceCarousel
-        infinite
-        mouseTracking
         animationType="fadeout" 
         animationDuration={800}
+        disableButtonsControls
+        infinite
         items={items}
+        mouseTracking
     />
 );
 ```

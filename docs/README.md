@@ -30,7 +30,7 @@
 - `swipeExtraPadding`: Number, default `200`  - Set maximum distance from initial place before swipe action will be stopped (px).
 - `touchTracking`: Boolean, default `true`  - Enable touch move animation.
 - `touchMoveDefaultEvents`: Boolean, default `true`  - Enable touch move default events on swiping.
-- `onInitialized(e: EventObject) => void`: Function - Fired when the event object is changing.
+- `onInitialized(e: EventObject) => void`: Function - Fired as callback after the gallery was created.
 - `onResizeEvent(e: Event, prevProps: RootElement, nextProps: RootElement) => boolean`: Function - Fired during `resize` event to determine whether the event handler should be called.
 - `onResized(e: EventObject) => void`: Function - Fired as callback after the gallery was resized.
 - `onSlideChange(e: EventObject) => void`: Function - Fired while the event object is changing.
